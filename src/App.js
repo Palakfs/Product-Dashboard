@@ -1,23 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import { useQuery } from "@tanstack/react-query";
+import "./App.css";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./components/ui/table";
+import { Button } from "./components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./components/ui/dialog";
+import { Input } from "./components/ui/input"
+import { Label } from "./components/ui/label"
 
 function App() {
+  const {data} = useQuery({
+    queryKey: ["product"],
+    queryFn: async () => {
+      const res = await fetch("https://dummyjson.com/products");
+      return res.json();
+    },
+  });
+
+  console.log(data);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="flex flex-col gap-4 p-10">
+        <div className="flex flex-row padding-10 justify-between">
+          <h2>Products</h2>
+          <Button variant="outline">Add Product</Button>
+          </div>
+      <div className="margin-100">
+      <Table>
+        <TableCaption>Products</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Title</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead className="text-right">Stock</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data?.products.map((product) => (
+            <TableRow key={product.id}>
+              <TableCell className="font-medium">{product.title}</TableCell>
+              <TableCell>{product.price}</TableCell>
+              <TableCell>{product.category}</TableCell>
+              <TableCell className="text-right">{product.stock}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      </div>
+      </div>
     </div>
   );
 }
