@@ -1,19 +1,93 @@
-import React from "react";
-import { Button } from "./components/ui/button";
+import React , {use, useState} from "react";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import { Button } from "../components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "../components/ui/dialog";
+import { Input } from "../components/ui/input"
+import { Label } from "../components/ui/label"
+
+const createProduct = async ({ title, price, category, stock }) => {
+  return fetch("https://dummyjson.com/products/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, price, category, stock }),
+  }).then(res => res.json()).then(console.log);
+};
+
 
 const Add_Product = () => {
-  return ( 
-  <div className="flex flex-col">
-    <h2>Add Product</h2>
-    <div className="flex flex-col gap-4 p-10">
-        <input type="text" placeholder="Title" className="border p-2 rounded-md"/>
-        <input type="number" placeholder="Price" className="border p-2 rounded-md"/>
-        <input type="text" placeholder="Category" className="border p-2 rounded-md"/>
-        <input type="number" placeholder="Stock" className="border p-2 rounded-md"/>
-        <Button variant="outline">Add Product</Button>
-    </div>
-  </div>
-  );
+    const [title, setTitle] = useState("");
+    const [price, setPrice] = useState("");
+    const [category, setCategory] = useState("");
+    const [stock, setStock] = useState("")
+    const queryClient = useQueryClient();
+    const productMutation = useMutation({
+    mutationFn: createProduct,
+    onSuccess: () => {
+    console.log("Product added successfully");
+    queryClient.invalidateQueries({ queryKey: ["product"] });
+    },
+    onError: (error) => {
+    console.log("Error adding product: ", error);
+    },
+});
+
+return (
+    <Dialog>
+      <form>
+        <DialogTrigger asChild>
+          <Button variant="outline">Add Product</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add Product</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4">
+            <div className="grid gap-3">
+              <Label htmlFor="title">Title</Label>
+              <Input id="title" name="title" onChange={(e) => setTitle(e.target.value)} 
+                value={title} placeholder="Product Title" />
+            </div>
+            <div className="grid gap-3">
+            <Label htmlFor="price">Price</Label>
+            <Input id="price" name="price" onChange={(e) => setPrice(e.target.value)} value={price} placeholder="0" type="number" />
+            </div>
+            <div className="grid gap-3">
+            <Label htmlFor="category">Category</Label>
+            <Input id="category" name="category" onChange={(e)=>setCategory(e.target.value)} value={category} placeholder="Product Category"/>
+            </div>
+            <div className="grid gap-3">
+            <Label htmlFor="stock">Stock</Label>
+            <Input id="stock" name="stock" onChange={(e) =>setStock(e.target.value)} value={stock} placeholder="0" type="number" />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button
+              type="submit"
+              variant="outline"
+              onClick={(e) => {
+                e.preventDefault();
+                productMutation.mutate({ title, price, category, stock });
+              }}
+>
+  Add Product
+</Button>
+
+          </DialogFooter>
+        </DialogContent>
+      </form>
+    </Dialog>
+  )
 }
 
 export default Add_Product;

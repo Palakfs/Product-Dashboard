@@ -10,16 +10,9 @@ import {
   TableRow,
 } from "./components/ui/table";
 import { Button } from "./components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./components/ui/dialog";
 import { Input } from "./components/ui/input"
 import { Label } from "./components/ui/label"
+import Add_Product from "./Forms/Add_Product";
 
 function App() {
   const {data} = useQuery({
@@ -37,7 +30,10 @@ function App() {
       <div className="flex flex-col gap-4 p-10">
         <div className="flex flex-row padding-10 justify-between">
           <h2>Products</h2>
-          <Button variant="outline">Add Product</Button>
+          <div className="flex flex-row gap-2">
+            <Input placeholder="Search Product" />
+            <Add_Product />
+            </div>
           </div>
       <div className="margin-100">
       <Table>
