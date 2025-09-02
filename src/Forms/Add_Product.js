@@ -43,7 +43,7 @@ return (
     <Dialog className="m-4">
       <form>
         <DialogTrigger asChild>
-          <Button variant="outline">Add Product</Button>
+          <Button variant="outline" className="hover:text-white hover:bg-purple-700 border-purple-400">Add Product</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
