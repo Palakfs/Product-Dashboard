@@ -1,4 +1,4 @@
-## **🛒Product Dashboard**
+## **🛒 Product Dashboard**
 
 A small, responsive product management dashboard built with React, Tailwind CSS, Shadcn UI Components and React Query (TanStack Query), using the DummyJSON API.
 
