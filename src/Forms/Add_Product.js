@@ -22,7 +22,7 @@ const createProduct = async ({ title, price, category, stock }) => {
 };
 
 
-const Add_Product = ({onSuccess}) => {
+const AddProduct = ({onSuccess}) => {
     const [title, setTitle] = useState("");
     const [price, setPrice] = useState("");
     const [category, setCategory] = useState("");
@@ -93,4 +93,4 @@ return (
   )
 }
 
-export default Add_Product;
+export default AddProduct;

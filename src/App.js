@@ -4,7 +4,6 @@ import "./App.css";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -12,9 +11,8 @@ import {
 } from "./components/ui/table";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input"
-import { Label } from "./components/ui/label"
-import Add_Product from "./Forms/Add_Product";
-import Update_Product from "./Forms/Update_Product";
+import AddProduct from "./Forms/Add_Product";
+import UpdateProduct from "./Forms/Update_Product";
 import Sidebar from "./components/ui/sidebar";
 import Header from "./components/ui/header";
 
@@ -75,7 +73,7 @@ const deleteMutation = useMutation({
           setSearchQuery(e.target.value);
           setCurrentPage(0); 
           }}/>
-            <Add_Product
+            <AddProduct
             onSuccess={(title) => setSuccessMessage(`Product: ${title} added successfully`)}
             />
             </div>
@@ -102,7 +100,7 @@ const deleteMutation = useMutation({
               <TableCell className="hidden md:table-cell">{product.category}</TableCell>
               <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
               <TableCell className="">
-                <Update_Product 
+                <UpdateProduct 
                   id={product.id} 
                   onSuccess={(title) => setSuccessMessage(`Product: ${title} updated successfully`)}
                 />

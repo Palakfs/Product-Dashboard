@@ -1,4 +1,4 @@
-import React , {useState, useEffect} from "react";
+import React , {useState} from "react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
 import {
@@ -21,7 +21,7 @@ const updateProduct = async ({ title, price, category, stock, id }) => {
   }).then(res => res.json()).then(console.log);
 };
 
-const Update_Product = ( {id,onSuccess} ) => {
+const UpdateProduct = ( {id,onSuccess} ) => {
     const [title, setTitle] = useState("");
     const [price, setPrice] = useState("");
     const [category, setCategory] = useState("");
@@ -108,4 +108,4 @@ return (
   )
 }
 
-export default Update_Product;
+export default UpdateProduct;
