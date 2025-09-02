@@ -40,7 +40,7 @@ const Add_Product = () => {
 });
 
 return (
-    <Dialog>
+    <Dialog className="m-4">
       <form>
         <DialogTrigger asChild>
           <Button variant="outline">Add Product</Button>

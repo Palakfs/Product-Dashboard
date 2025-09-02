@@ -15,6 +15,8 @@ import { Input } from "./components/ui/input"
 import { Label } from "./components/ui/label"
 import Add_Product from "./Forms/Add_Product";
 import Update_Product from "./Forms/Update_Product";
+import Sidebar from "./components/ui/sidebar";
+import Header from "./components/ui/header";
 
 function deleteProduct(id) {
   fetch(`https://dummyjson.com/products/${id}`, {
@@ -58,13 +60,15 @@ function App() {
 
   return (
     <div className="App">
-      <div className="flex flex-col gap-4 p-10">
-        <div className="flex flex-row padding-10 justify-between">
-          <h2>Products</h2>
-          <div className="flex flex-row gap-2">
+      <div className="flex h-screen">
+      <Sidebar />
+      <div className="flex flex-col w-full">
+        <Header />
+          <div className="flex flex-row gap-2 m-2 ml-4 mr-4 mt-3">
             <Input
           type="text"
           placeholder="Search Product"
+          className="mr-4"
           value={searchQuery}
           onChange={(e) => {
           setSearchQuery(e.target.value);
@@ -72,8 +76,8 @@ function App() {
           }}/>
             <Add_Product />
             </div>
-          </div>
-      <div className="margin-100">
+          
+      <div className="ml-4">
     {isLoading && <p>Loading...</p>}
     {isError && <p>Error loading products</p>}
       <Table>
@@ -110,7 +114,7 @@ function App() {
         </TableBody>
       </Table>
       </div>
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-2 justify-center">
   <Button
     onClick={() => setCurrentPage((p) => Math.max(p - 1, 0))}
     disabled={currentPage === 0}
@@ -127,7 +131,7 @@ function App() {
     Next
   </Button>
 </div>
-
+          </div>
       </div>
     </div>
   );
