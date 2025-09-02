@@ -25,12 +25,18 @@ function deleteProduct(id) {
 
 function App() {
   const [currentPage, setCurrentPage] = React.useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
   
   const { data, isLoading, isError }  = useQuery({
-    queryKey: ["product",currentPage],
+    queryKey: ["product",currentPage,searchQuery],
     queryFn: async () => {
+      if(searchQuery){
+        const res = await fetch(`https://dummyjson.com/products/search?q=${searchQuery}&limit=10&skip=${currentPage * 10}`);
+        return res.json();
+      }else{
       const res = await fetch( `https://dummyjson.com/products?limit=10&skip=${currentPage * 10}`);
       return res.json();
+      }
     },
     keepPreviousData: true
   });
@@ -56,7 +62,14 @@ function App() {
         <div className="flex flex-row padding-10 justify-between">
           <h2>Products</h2>
           <div className="flex flex-row gap-2">
-            <Input placeholder="Search Product" />
+            <Input
+          type="text"
+          placeholder="Search Product"
+          value={searchQuery}
+          onChange={(e) => {
+          setSearchQuery(e.target.value);
+          setCurrentPage(0); 
+          }}/>
             <Add_Product />
             </div>
           </div>
