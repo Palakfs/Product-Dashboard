@@ -1,4 +1,5 @@
 import { useQuery,useMutation, useQueryClient} from "@tanstack/react-query";
+import React, { useState } from "react";
 import "./App.css";
 import {
   Table,
@@ -23,12 +24,15 @@ function deleteProduct(id) {
 }
 
 function App() {
-  const {data} = useQuery({
-    queryKey: ["product"],
+  const [currentPage, setCurrentPage] = React.useState(0);
+  
+  const { data, isLoading, isError }  = useQuery({
+    queryKey: ["product",currentPage],
     queryFn: async () => {
-      const res = await fetch("https://dummyjson.com/products");
+      const res = await fetch( `https://dummyjson.com/products?limit=10&skip=${currentPage * 10}`);
       return res.json();
     },
+    keepPreviousData: true
   });
 
   console.log(data);
@@ -57,8 +61,9 @@ function App() {
             </div>
           </div>
       <div className="margin-100">
+    {isLoading && <p>Loading...</p>}
+    {isError && <p>Error loading products</p>}
       <Table>
-        <TableCaption>Products</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Title</TableHead>
@@ -70,7 +75,7 @@ function App() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.products.map((product) => (
+          {data?.products?.map((product) => (
             <TableRow key={product.id}>
               <TableCell className="font-medium">{product.title}</TableCell>
               <TableCell>{product.price}</TableCell>
@@ -92,6 +97,24 @@ function App() {
         </TableBody>
       </Table>
       </div>
+      <div className="flex gap-2 mt-4">
+  <Button
+    onClick={() => setCurrentPage((p) => Math.max(p - 1, 0))}
+    disabled={currentPage === 0}
+    variant="outline"
+  >
+    Previous
+  </Button>
+
+  <Button
+    onClick={() => setCurrentPage((p) => p + 1)}
+    disabled={!data || (currentPage + 1) * 10 >= data.total}
+    variant="outline"
+  >
+    Next
+  </Button>
+</div>
+
       </div>
     </div>
   );
