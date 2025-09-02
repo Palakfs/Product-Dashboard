@@ -64,11 +64,11 @@ function App() {
       <Sidebar />
       <div className="flex flex-col w-full">
         <Header />
-          <div className="flex flex-row gap-2 m-2 ml-4 mr-4 mt-3">
+          <div className="flex flex-col gap-2 m-2 ml-4 mr-4 mt-3 md:flex-row">
             <Input
           type="text"
           placeholder="Search Product"
-          className="mr-4"
+          className="mr-1 md:mr-4"
           value={searchQuery}
           onChange={(e) => {
           setSearchQuery(e.target.value);
@@ -84,11 +84,11 @@ function App() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Title</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead className="text-right">Stock</TableHead>
-            <TableHead></TableHead>
-            <TableHead></TableHead>
+            <TableHead className="text-center">Price</TableHead>
+            <TableHead className="hidden md:table-cell text-center">Category</TableHead>
+            <TableHead className="hidden md:table-cell text-center">Stock</TableHead>
+            <TableHead className="text-center">Edit</TableHead>
+            <TableHead className="text-center">Delete</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -96,9 +96,9 @@ function App() {
             <TableRow key={product.id}>
               <TableCell className="font-medium">{product.title}</TableCell>
               <TableCell>{product.price}</TableCell>
-              <TableCell>{product.category}</TableCell>
-              <TableCell className="text-right">{product.stock}</TableCell>
-              <TableCell className="text-right">
+              <TableCell className="hidden md:table-cell">{product.category}</TableCell>
+              <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
+              <TableCell className="">
                 <Update_Product id={product.id}/>
               </TableCell>
               <TableCell>

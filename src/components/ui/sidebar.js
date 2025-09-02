@@ -1,7 +1,7 @@
 import React from "react";
 export default function Sidebar() {
   return (
-    <aside className="h-screen w-64 bg-gray-900 text-white flex flex-col">
+    <aside className="hidden h-screen w-64 bg-gray-800 text-white md:flex flex-col">
       <div className="p-6 text-2xl font-bold border-b border-gray-700">
         Sidebar
       </div>
