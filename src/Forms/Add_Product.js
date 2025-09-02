@@ -22,7 +22,7 @@ const createProduct = async ({ title, price, category, stock }) => {
 };
 
 
-const Add_Product = () => {
+const Add_Product = ({onSuccess}) => {
     const [title, setTitle] = useState("");
     const [price, setPrice] = useState("");
     const [category, setCategory] = useState("");
@@ -30,9 +30,12 @@ const Add_Product = () => {
     const queryClient = useQueryClient();
     const productMutation = useMutation({
     mutationFn: createProduct,
-    onSuccess: () => {
+    onSuccess: (data,variables) => {
     console.log("Product added successfully");
     queryClient.invalidateQueries({ queryKey: ["product"] });
+    if (onSuccess) {
+        onSuccess(variables.title);
+      }
     },
     onError: (error) => {
     console.log("Error adding product: ", error);
@@ -72,17 +75,17 @@ return (
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
+            <DialogClose asChild>
             <Button
               type="submit"
               variant="outline"
               onClick={(e) => {
-                e.preventDefault();
                 productMutation.mutate({ title, price, category, stock });
               }}
 >
   Add Product
 </Button>
-
+              </DialogClose>
           </DialogFooter>
         </DialogContent>
       </form>

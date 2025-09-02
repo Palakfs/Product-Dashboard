@@ -21,7 +21,7 @@ const updateProduct = async ({ title, price, category, stock, id }) => {
   }).then(res => res.json()).then(console.log);
 };
 
-const Update_Product = ( {id} ) => {
+const Update_Product = ( {id,onSuccess} ) => {
     const [title, setTitle] = useState("");
     const [price, setPrice] = useState("");
     const [category, setCategory] = useState("");
@@ -30,9 +30,12 @@ const Update_Product = ( {id} ) => {
     const queryClient = useQueryClient();
     const updateMutation = useMutation({
     mutationFn: updateProduct,
-    onSuccess: () => {
-    console.log("Product updated successfully");
-    queryClient.invalidateQueries({ queryKey: ["product"] });
+    onSuccess: (data, variables) => {
+      console.log("Product updated successfully", data);
+      queryClient.invalidateQueries({ queryKey: ["product"] });
+      if (onSuccess) {
+        onSuccess(variables.title);
+      }
     },
     onError: (error) => {
     console.log("Error updating product: ", error);
@@ -86,17 +89,18 @@ return (
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
+            <DialogClose asChild>
             <Button
               type="submit"
               variant="outline"
               onClick={(e) => {
-                e.preventDefault();
+
                 updateMutation.mutate({ title, price, category, stock, id });
               }}
 >
   Update Product
 </Button>
-
+              </DialogClose>
           </DialogFooter>
         </DialogContent>
       </form>

@@ -28,6 +28,7 @@ function deleteProduct(id) {
 function App() {
   const [currentPage, setCurrentPage] = React.useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   
   const { data, isLoading, isError }  = useQuery({
     queryKey: ["product",currentPage,searchQuery],
@@ -45,18 +46,18 @@ function App() {
 
   console.log(data);
 
-  const queryClient = useQueryClient();
-  const deleteMutation = useMutation({
-      mutationFn: deleteProduct,
-      onSuccess: () => {
-      console.log("Product deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["product"] });
-      },
-      onError: (error) => {
-      console.log("Error deleting product: ", error);
-      },
-  });
-  
+const queryClient = useQueryClient();
+const deleteMutation = useMutation({
+  mutationFn: deleteProduct,
+  onSuccess: (data, variables) => {
+    console.log("Product deleted successfully");
+    setSuccessMessage(`Product: ${variables.title} deleted successfully`);
+    queryClient.invalidateQueries({ queryKey: ["product"] });
+  },
+  onError: (error) => {
+    console.log("Error deleting product: ", error);
+  },
+});  
 
   return (
     <div className="App">
@@ -74,7 +75,9 @@ function App() {
           setSearchQuery(e.target.value);
           setCurrentPage(0); 
           }}/>
-            <Add_Product />
+            <Add_Product
+            onSuccess={(title) => setSuccessMessage(`Product: ${title} added successfully`)}
+            />
             </div>
           
       <div className="ml-4">
@@ -99,15 +102,29 @@ function App() {
               <TableCell className="hidden md:table-cell">{product.category}</TableCell>
               <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
               <TableCell className="">
-                <Update_Product id={product.id}/>
+                <Update_Product 
+                  id={product.id} 
+                  onSuccess={(title) => setSuccessMessage(`Product: ${title} updated successfully`)}
+                />
               </TableCell>
               <TableCell>
                 <Button onClick={(e) => {
-                deleteMutation.mutate(product.id);
+                deleteMutation.mutate({ id: product.id, title: product.title });
               }}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="red" className="size-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                 </svg>
                 </Button>
+                {successMessage && (
+        <div className="fixed bottom-5 right-5 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg">
+          {successMessage}
+          <button
+            className="ml-3 text-sm underline"
+            onClick={() => setSuccessMessage("")}
+          >
+            Close
+          </button>
+        </div>
+      )}
               </TableCell>
             </TableRow>
           ))}
