@@ -67,7 +67,7 @@ const deleteMutation = useMutation({
             <Input
           type="text"
           placeholder="Search Product"
-          className="mr-1 md:mr-4 dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-purple-400 focus:ring-purple-400"
+          className="mr-1 md:mr-4 border-gray-300 dark:border-gray-600 focus:border-purple-400 focus:ring-purple-400"
           value={searchQuery}
           onChange={(e) => {
           setSearchQuery(e.target.value);
